@@ -1,0 +1,15 @@
+Analyzing itsushita...                                          
+
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\main.dart:4:8 - uri_does_not_exist
+  error - The values in a const list literal must be constants - lib\main.dart:26:9 - non_constant_list_element
+  error - Undefined name 'AppLocalizations' - lib\main.dart:26:9 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\screens\actions_manage_screen.dart:4:8 - uri_does_not_exist
+  error - Undefined name 'AppLocalizations' - lib\screens\actions_manage_screen.dart:15:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\screens\actions_manage_screen.dart:154:18 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\screens\calendar_screen.dart:5:8 - uri_does_not_exist
+  error - Undefined name 'AppLocalizations' - lib\screens\calendar_screen.dart:32:18 - undefined_identifier
+  error - Undefined class 'AppLocalizations' - lib\screens\calendar_screen.dart:157:5 - undefined_class
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\screens\dashboard_screen.dart:4:8 - uri_does_not_exist
+  error - Undefined name 'AppLocalizations' - lib\screens\dashboard_screen.dart:15:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\screens\dashboard_screen.dart:80:18 - undefined_identifier
+

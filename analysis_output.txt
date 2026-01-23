@@ -1,0 +1,22 @@
+Analyzing itsushita...                                          
+
+  error - The function 'StateNotifierProvider' isn't defined - lib\providers\action_provider.dart:6:5 - undefined_function
+  error - Classes can only extend other classes - lib\providers\action_provider.dart:10:34 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\providers\action_provider.dart:11:32 - extra_positional_arguments
+  error - Undefined name 'state' - lib\providers\action_provider.dart:17:5 - undefined_identifier
+  error - The function 'StateNotifierProvider' isn't defined - lib\providers\record_provider.dart:6:5 - undefined_function
+  error - Classes can only extend other classes - lib\providers\record_provider.dart:10:34 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\providers\record_provider.dart:11:32 - extra_positional_arguments
+  error - Undefined name 'state' - lib\providers\record_provider.dart:17:5 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\actions_manage_screen.dart:44:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\actions_manage_screen.dart:58:57 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion - lib\screens\actions_manage_screen.dart:213:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\calendar_screen.dart:63:39 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion - lib\screens\calendar_screen.dart:117:70 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\calendar_screen.dart:175:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\calendar_screen.dart:189:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:81:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:89:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:136:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\dashboard_screen.dart:162:41 - deprecated_member_use
+
