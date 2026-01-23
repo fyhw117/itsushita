@@ -9,7 +9,16 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get dashboardTitle => 'マイ・ルーティン';
+  String get dashboardTitle => 'アクション記録';
+
+  @override
+  String get tabDashboard => '記録';
+
+  @override
+  String get tabHistory => '履歴';
+
+  @override
+  String get tabManage => 'アクション';
 
   @override
   String get manageActionsTitle => 'アクション管理';
@@ -24,7 +33,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get goManageToAdd => '管理タブから追加しましょう！';
 
   @override
-  String get newAction => '新規アクション';
+  String get newAction => 'アクション追加';
 
   @override
   String get actionName => 'アクション名';
@@ -84,4 +93,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get language => '言語';
+
+  @override
+  String get editAction => 'アクション編集';
+
+  @override
+  String get update => '更新';
 }

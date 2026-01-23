@@ -62,25 +62,30 @@ class ActionsManageScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final action = actions[index];
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
+                  margin: const EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.03),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
                       ),
                     ],
                   ),
                   child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
+                    visualDensity: const VisualDensity(
+                      horizontal: 0,
+                      vertical: -4,
                     ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 0,
+                    ),
+                    dense: true,
                     leading: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Color(action.colorValue).withValues(alpha: 0.1),
                         shape: BoxShape.circle,
@@ -90,48 +95,26 @@ class ActionsManageScreen extends ConsumerWidget {
                             ? Icons.check_circle_outline
                             : Icons.block_outlined,
                         color: Color(action.colorValue),
+                        size: 18,
                       ),
                     ),
                     title: Text(
                       action.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     subtitle: Text(
                       '${action.type == ActionType.shouldDo ? l10n.positive : l10n.negative} • ${action.frequency.isEmpty ? l10n.noFrequency : action.frequency}',
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete_outline, color: Colors.red[300]),
+                      icon: Icon(Icons.edit, color: Colors.blue[300], size: 18),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       onPressed: () {
-                        // Confirm deletion
-                        showDialog(
-                          context: context,
-                          builder: (c) => AlertDialog(
-                            title: Text(l10n.deleteAction),
-                            content: Text(l10n.deleteActionConfirmation),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(c),
-                                child: Text(l10n.cancel),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  ref
-                                      .read(actionListProvider.notifier)
-                                      .deleteAction(action.id);
-                                  Navigator.pop(c);
-                                },
-                                child: Text(
-                                  l10n.delete,
-                                  style: const TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                        _showActionDialog(context, ref, actionToEdit: action);
                       },
                     ),
                   ),
@@ -139,7 +122,7 @@ class ActionsManageScreen extends ConsumerWidget {
               },
             ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddActionDialog(context, ref),
+        onPressed: () => _showActionDialog(context, ref),
         label: Text(l10n.newAction),
         icon: const Icon(Icons.add),
         backgroundColor: Colors.teal,
@@ -148,12 +131,21 @@ class ActionsManageScreen extends ConsumerWidget {
     );
   }
 
-  void _showAddActionDialog(BuildContext context, WidgetRef ref) {
-    final nameController = TextEditingController();
-    final frequencyController = TextEditingController();
+  void _showActionDialog(
+    BuildContext context,
+    WidgetRef ref, {
+    ActionItem? actionToEdit,
+  }) {
     final l10n = AppLocalizations.of(context)!;
-    ActionType selectedType = ActionType.shouldDo;
-    Color selectedColor = Colors.blue;
+    final nameController = TextEditingController(text: actionToEdit?.name);
+    final frequencyController = TextEditingController(
+      text: actionToEdit?.frequency,
+    );
+
+    ActionType selectedType = actionToEdit?.type ?? ActionType.shouldDo;
+    Color selectedColor = actionToEdit != null
+        ? Color(actionToEdit.colorValue)
+        : Colors.blue;
 
     showDialog(
       context: context,
@@ -161,7 +153,9 @@ class ActionsManageScreen extends ConsumerWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(l10n.newAction),
+              title: Text(
+                actionToEdit == null ? l10n.newAction : l10n.editAction,
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -221,6 +215,42 @@ class ActionsManageScreen extends ConsumerWidget {
                 ),
               ),
               actions: [
+                if (actionToEdit != null)
+                  TextButton(
+                    onPressed: () {
+                      // Confirm deletion within edit dialog
+                      showDialog(
+                        context: context,
+                        builder: (c) => AlertDialog(
+                          title: Text(l10n.deleteAction),
+                          content: Text(l10n.deleteActionConfirmation),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(c),
+                              child: Text(l10n.cancel),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref
+                                    .read(actionListProvider.notifier)
+                                    .deleteAction(actionToEdit.id);
+                                Navigator.pop(c); // Close confirm
+                                Navigator.pop(context); // Close edit
+                              },
+                              child: Text(
+                                l10n.delete,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Text(
+                      l10n.delete,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(l10n.cancel),
@@ -229,7 +259,8 @@ class ActionsManageScreen extends ConsumerWidget {
                   onPressed: () {
                     if (nameController.text.isNotEmpty) {
                       final newAction = ActionItem(
-                        id: const Uuid().v4(),
+                        // Use existing ID if editing, else generate new
+                        id: actionToEdit?.id ?? const Uuid().v4(),
                         name: nameController.text,
                         type: selectedType,
                         colorValue: selectedColor.toARGB32(),
@@ -237,11 +268,13 @@ class ActionsManageScreen extends ConsumerWidget {
                       );
                       ref
                           .read(actionListProvider.notifier)
-                          .addAction(newAction);
+                          .addAction(
+                            newAction,
+                          ); // addAction handles insert/replace
                       Navigator.pop(context);
                     }
                   },
-                  child: Text(l10n.add),
+                  child: Text(actionToEdit == null ? l10n.add : l10n.update),
                 ),
               ],
             );

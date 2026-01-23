@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/action_item.dart';
 import '../data/database_helper.dart';
@@ -15,13 +16,23 @@ class ActionListNotifier extends Notifier<List<ActionItem>> {
   }
 
   Future<void> _loadActions() async {
-    final actions = await DatabaseHelper().getActions();
-    state = actions;
+    try {
+      final actions = await DatabaseHelper().getActions();
+      debugPrint('ActionListNotifier: Loaded ${actions.length} actions');
+      state = actions;
+    } catch (e) {
+      debugPrint('ActionListNotifier: Error loading actions: $e');
+    }
   }
 
   Future<void> addAction(ActionItem action) async {
-    await DatabaseHelper().insertAction(action);
-    await _loadActions();
+    try {
+      debugPrint('ActionListNotifier: Adding action ${action.name}');
+      await DatabaseHelper().insertAction(action);
+      await _loadActions();
+    } catch (e) {
+      debugPrint('ActionListNotifier: Error adding action: $e');
+    }
   }
 
   Future<void> deleteAction(String id) async {

@@ -1,5 +1,8 @@
 {
   "dashboardTitle": "My Routine",
+  "tabDashboard": "Home",
+  "tabHistory": "History",
+  "tabManage": "Manage",
   "manageActionsTitle": "Manage Actions",
   "historyTitle": "History",
   "noActionsYet": "No actions yet.",
@@ -23,5 +26,7 @@
   "shouldNotDo": "Should Not Do",
   "noFrequency": "No frequency",
   "settingsTitle": "Settings",
-  "language": "Language"
+  "language": "Language",
+  "editAction": "Edit Action",
+  "update": "Update"
 }

@@ -104,6 +104,24 @@ abstract class AppLocalizations {
   /// **'My Routine'**
   String get dashboardTitle;
 
+  /// No description provided for @tabDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tabDashboard;
+
+  /// No description provided for @tabHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get tabHistory;
+
+  /// No description provided for @tabManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get tabManage;
+
   /// No description provided for @manageActionsTitle.
   ///
   /// In en, this message translates to:
@@ -247,6 +265,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// No description provided for @editAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Action'**
+  String get editAction;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
 }
 
 class _AppLocalizationsDelegate

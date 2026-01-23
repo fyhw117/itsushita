@@ -12,6 +12,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardTitle => 'My Routine';
 
   @override
+  String get tabDashboard => 'Home';
+
+  @override
+  String get tabHistory => 'History';
+
+  @override
+  String get tabManage => 'Manage';
+
+  @override
   String get manageActionsTitle => 'Manage Actions';
 
   @override
@@ -85,4 +94,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get language => 'Language';
+
+  @override
+  String get editAction => 'Edit Action';
+
+  @override
+  String get update => 'Update';
 }

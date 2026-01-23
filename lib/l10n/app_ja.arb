@@ -1,10 +1,13 @@
 {
-  "dashboardTitle": "マイ・ルーティン",
+  "dashboardTitle": "アクション記録",
+  "tabDashboard": "記録",
+  "tabHistory": "履歴",
+  "tabManage": "アクション",
   "manageActionsTitle": "アクション管理",
   "historyTitle": "履歴",
   "noActionsYet": "アクションがまだありません。",
   "goManageToAdd": "管理タブから追加しましょう！",
-  "newAction": "新規アクション",
+  "newAction": "アクション追加",
   "actionName": "アクション名",
   "frequency": "頻度（例：毎日）",
   "type": "種類",
@@ -23,5 +26,7 @@
   "shouldNotDo": "非推奨",
   "noFrequency": "頻度なし",
   "settingsTitle": "設定",
-  "language": "言語"
+  "language": "言語",
+  "editAction": "アクション編集",
+  "update": "更新"
 }

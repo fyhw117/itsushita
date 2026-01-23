@@ -5,7 +5,16 @@ import 'package:itsushita/l10n/app_localizations.dart';
 import 'screens/main_screen.dart';
 import 'providers/locale_provider.dart';
 
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux)) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   runApp(const ProviderScope(child: MyApp()));
 }
 

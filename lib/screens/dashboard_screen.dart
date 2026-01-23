@@ -55,9 +55,9 @@ class DashboardScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.85,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1.5,
               ),
               itemCount: actions.length,
               itemBuilder: (context, index) {
@@ -78,6 +78,88 @@ class _ActionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final baseColor = Color(action.colorValue);
     final l10n = AppLocalizations.of(context)!;
+    final allRecords = ref.watch(recordListProvider);
+
+    // Filter records for this action
+    final actionRecords = allRecords
+        .where((r) => r.actionId == action.id)
+        .toList();
+
+    // Sort records descending
+    actionRecords.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+    int getStreak() {
+      if (actionRecords.isEmpty) return 0;
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      // Calculate positive streak (consecutive days doing it)
+      // Check if done today or yesterday to keep streak alive
+
+      // Simplify: Turn timestamps into set of normalization dates
+      final doneDates = actionRecords.map((r) {
+        final t = r.timestamp;
+        return DateTime(t.year, t.month, t.day);
+      }).toSet();
+
+      if (doneDates.isEmpty) return 0;
+
+      int streak = 0;
+      // Check backwards from today
+      DateTime checkDate = today;
+
+      // If not done today, check if done yesterday to start counting
+      if (!doneDates.contains(checkDate)) {
+        checkDate = checkDate.subtract(const Duration(days: 1));
+        if (!doneDates.contains(checkDate)) {
+          return 0; // Streak broken if not done today or yesterday
+        }
+      }
+
+      while (doneDates.contains(checkDate)) {
+        streak++;
+        checkDate = checkDate.subtract(const Duration(days: 1));
+      }
+
+      return streak;
+    }
+
+    // Simple calculations for "Not done for X days" if beneficial,
+    // but user asked for "Continuous implementation days OR Continuous non-implementation days".
+
+    String getStreakText() {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      if (actionRecords.isEmpty) {
+        // Never done
+        return '';
+      }
+
+      final lastDone = actionRecords.first.timestamp;
+      final lastDoneDate = DateTime(
+        lastDone.year,
+        lastDone.month,
+        lastDone.day,
+      );
+
+      final daysSinceLast = today.difference(lastDoneDate).inDays;
+
+      if (daysSinceLast > 1) {
+        // Not done for a while
+        return '$daysSinceLast日未実施';
+      } else {
+        // Done recently, show streak
+        final streak = getStreak();
+        if (streak > 1) {
+          return '$streak日連続';
+        }
+      }
+      return '';
+    }
+
+    final streakText = getStreakText();
 
     return Container(
       decoration: BoxDecoration(
@@ -132,49 +214,78 @@ class _ActionCard extends ConsumerWidget {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 12.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.touch_app_rounded,
-                    size: 32,
-                    color: Colors.white,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.touch_app_rounded,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        action.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                Text(
-                  action.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                if (action.frequency.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    action.frequency,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.9),
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  action.frequency.isNotEmpty
-                      ? action.frequency
-                      : l10n.frequency
-                            .split('(')[0]
-                            .trim(), // Approx "Frequency" word or just show empty if not sure. Or "Daily" default.
-                  // Actually the mock had "Daily" fallback.
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.9),
+                ],
+                if (streakText.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      streakText,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 4),
+                ],
               ],
             ),
           ),

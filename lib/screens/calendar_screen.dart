@@ -175,51 +175,90 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         final color = action != null ? Color(action.colorValue) : Colors.grey;
         final name = action?.name ?? l10n.unknownAction;
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
+        return Dismissible(
+          key: Key(record.id),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            margin: const EdgeInsets.only(bottom: 4),
+            decoration: BoxDecoration(
+              color: Colors.red[400],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
           ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 8,
-            ),
-            leading: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
+          onDismissed: (direction) {
+            ref.read(recordListProvider.notifier).deleteRecord(record.id);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  '${l10n.delete}: $name',
+                ), // Reusing "Delete" string roughly or make a new one. "Deleted" is better but adhering to current strings.
+                action: SnackBarAction(
+                  label: l10n.cancel,
+                  onPressed: () {
+                    // Since undo requires reinstating the record, doing a simple re-add is easiest if we had keeping the object.
+                    // But for now, simple deletion is requested. "Action can be cancelled" usually implies undo or just ability to delete.
+                    // I'll stick to delete. Optimistic UI update via provider is good.
+                    // To implement true Undo, I'd need to re-add the record.
+                    ref.read(recordListProvider.notifier).addRecord(record);
+                  },
+                ),
               ),
-              child: Icon(Icons.check, color: color),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
-            title: Text(
-              name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            child: ListTile(
+              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 0,
+              ),
+              dense: true,
+              leading: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.check, color: color, size: 16),
+              ),
+              title: Text(
+                name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+              subtitle: Text(
+                DateFormat('h:mm a').format(record.timestamp),
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+              trailing: action?.type == ActionType.shouldDo
+                  ? Icon(
+                      Icons.thumb_up_alt_rounded,
+                      color: Colors.green[300],
+                      size: 16,
+                    )
+                  : Icon(
+                      Icons.thumb_down_alt_rounded,
+                      color: Colors.orange[300],
+                      size: 16,
+                    ),
             ),
-            subtitle: Text(
-              DateFormat('h:mm a').format(record.timestamp),
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            trailing: action?.type == ActionType.shouldDo
-                ? Icon(
-                    Icons.thumb_up_alt_rounded,
-                    color: Colors.green[300],
-                    size: 20,
-                  )
-                : Icon(
-                    Icons.thumb_down_alt_rounded,
-                    color: Colors.orange[300],
-                    size: 20,
-                  ),
           ),
         );
       },

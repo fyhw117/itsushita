@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'actions_manage_screen.dart';
-import 'calendar_screen.dart';
+import 'package:itsushita/l10n/app_localizations.dart';
 import 'dashboard_screen.dart';
+import 'calendar_screen.dart';
+import 'actions_manage_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -21,21 +22,25 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) => setState(() => _currentIndex = index),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+            icon: const Icon(Icons.grid_view),
+            label: l10n.tabDashboard,
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
-            label: 'History',
+            icon: const Icon(Icons.calendar_month),
+            label: l10n.tabHistory,
           ),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Manage'),
+          NavigationDestination(
+            icon: const Icon(Icons.list_alt),
+            label: l10n.tabManage,
+          ),
         ],
       ),
     );
