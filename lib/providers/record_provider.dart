@@ -24,6 +24,11 @@ class RecordListNotifier extends Notifier<List<ActionRecord>> {
     await _loadRecords();
   }
 
+  Future<void> updateRecord(ActionRecord record) async {
+    await DatabaseHelper().insertRecord(record);
+    await _loadRecords();
+  }
+
   Future<void> deleteRecord(String id) async {
     await DatabaseHelper().deleteRecord(id);
     await _loadRecords();

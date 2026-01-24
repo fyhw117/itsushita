@@ -28,5 +28,9 @@
   "settingsTitle": "設定",
   "language": "言語",
   "editAction": "アクション編集",
-  "update": "更新"
+  "update": "更新",
+  "editRecord": "記録の編集",
+  "changeDate": "日付を変更",
+  "changeTime": "時間を変更",
+  "confirmDelete": "本当に削除しますか？"
 }

@@ -192,16 +192,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             ref.read(recordListProvider.notifier).deleteRecord(record.id);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(
-                  '${l10n.delete}: $name',
-                ), // Reusing "Delete" string roughly or make a new one. "Deleted" is better but adhering to current strings.
+                content: Text('${l10n.delete}: $name'),
                 action: SnackBarAction(
                   label: l10n.cancel,
                   onPressed: () {
-                    // Since undo requires reinstating the record, doing a simple re-add is easiest if we had keeping the object.
-                    // But for now, simple deletion is requested. "Action can be cancelled" usually implies undo or just ability to delete.
-                    // I'll stick to delete. Optimistic UI update via provider is good.
-                    // To implement true Undo, I'd need to re-add the record.
                     ref.read(recordListProvider.notifier).addRecord(record);
                   },
                 ),
@@ -228,6 +222,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 vertical: 0,
               ),
               dense: true,
+              onTap: () => _showEditRecordDialog(context, record, name, l10n),
               leading: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -260,6 +255,148 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showEditRecordDialog(
+    BuildContext context,
+    ActionRecord record,
+    String actionName,
+    AppLocalizations l10n,
+  ) async {
+    DateTime selectedDate = record.timestamp;
+    TimeOfDay selectedTime = TimeOfDay.fromDateTime(record.timestamp);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final dateTime = DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              selectedTime.hour,
+              selectedTime.minute,
+            );
+
+            return AlertDialog(
+              title: Text(l10n.editRecord),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    actionName,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    title: Text(l10n.changeDate),
+                    subtitle: Text(DateFormat.yMMMd().format(dateTime)),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2030),
+                      );
+                      if (picked != null) {
+                        setDialogState(() {
+                          selectedDate = picked;
+                        });
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: Text(l10n.changeTime),
+                    subtitle: Text(DateFormat.Hm().format(dateTime)),
+                    trailing: const Icon(Icons.access_time),
+                    onTap: () async {
+                      final picked = await showTimePicker(
+                        context: context,
+                        initialTime: selectedTime,
+                      );
+                      if (picked != null) {
+                        setDialogState(() {
+                          selectedTime = picked;
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    final shouldDelete = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(l10n.delete),
+                        content: Text(l10n.confirmDelete),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(l10n.cancel),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: Text(
+                              l10n.delete,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (shouldDelete == true) {
+                      if (context.mounted) {
+                        ref
+                            .read(recordListProvider.notifier)
+                            .deleteRecord(record.id);
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                  child: Text(
+                    l10n.delete,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(l10n.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    final newDateTime = DateTime(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                      selectedTime.hour,
+                      selectedTime.minute,
+                    );
+
+                    if (newDateTime != record.timestamp) {
+                      final newRecord = ActionRecord(
+                        id: record.id,
+                        actionId: record.actionId,
+                        timestamp: newDateTime,
+                      );
+                      ref
+                          .read(recordListProvider.notifier)
+                          .updateRecord(newRecord);
+                    }
+                    Navigator.pop(context);
+                  },
+                  child: Text(l10n.update),
+                ),
+              ],
+            );
+          },
         );
       },
     );

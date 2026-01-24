@@ -99,4 +99,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get update => '更新';
+
+  @override
+  String get editRecord => '記録の編集';
+
+  @override
+  String get changeDate => '日付を変更';
+
+  @override
+  String get changeTime => '時間を変更';
+
+  @override
+  String get confirmDelete => '本当に削除しますか？';
 }

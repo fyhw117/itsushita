@@ -100,4 +100,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get update => 'Update';
+
+  @override
+  String get editRecord => 'Edit Record';
+
+  @override
+  String get changeDate => 'Change Date';
+
+  @override
+  String get changeTime => 'Change Time';
+
+  @override
+  String get confirmDelete => 'Are you sure you want to delete?';
 }

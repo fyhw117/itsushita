@@ -28,5 +28,9 @@
   "settingsTitle": "Settings",
   "language": "Language",
   "editAction": "Edit Action",
-  "update": "Update"
+  "update": "Update",
+  "editRecord": "Edit Record",
+  "changeDate": "Change Date",
+  "changeTime": "Change Time",
+  "confirmDelete": "Are you sure you want to delete?"
 }

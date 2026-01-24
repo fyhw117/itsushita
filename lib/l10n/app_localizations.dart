@@ -277,6 +277,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update'**
   String get update;
+
+  /// No description provided for @editRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Record'**
+  String get editRecord;
+
+  /// No description provided for @changeDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Date'**
+  String get changeDate;
+
+  /// No description provided for @changeTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Time'**
+  String get changeTime;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete?'**
+  String get confirmDelete;
 }
 
 class _AppLocalizationsDelegate
