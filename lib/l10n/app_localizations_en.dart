@@ -112,4 +112,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmDelete => 'Are you sure you want to delete?';
+
+  @override
+  String streakDays(int count) {
+    return '$count Day Streak';
+  }
+
+  @override
+  String notDoneDays(int count) {
+    return '$count Days Not Done';
+  }
 }

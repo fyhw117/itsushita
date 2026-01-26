@@ -111,4 +111,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get confirmDelete => '本当に削除しますか？';
+
+  @override
+  String streakDays(int count) {
+    return '$count日連続';
+  }
+
+  @override
+  String notDoneDays(int count) {
+    return '$count日間未実施';
+  }
 }

@@ -301,6 +301,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete?'**
   String get confirmDelete;
+
+  /// No description provided for @streakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Day Streak'**
+  String streakDays(int count);
+
+  /// No description provided for @notDoneDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Days Not Done'**
+  String notDoneDays(int count);
 }
 
 class _AppLocalizationsDelegate
