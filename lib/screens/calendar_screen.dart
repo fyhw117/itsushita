@@ -179,9 +179,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
           ),
           onDismissed: (direction) {
             ref.read(recordListProvider.notifier).deleteRecord(record.id);
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('${l10n.delete}: $name'),
+                duration: const Duration(seconds: 4),
                 action: SnackBarAction(
                   label: l10n.cancel,
                   onPressed: () {
