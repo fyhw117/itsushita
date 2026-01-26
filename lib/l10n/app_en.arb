@@ -32,5 +32,21 @@
   "editRecord": "Edit Record",
   "changeDate": "Change Date",
   "changeTime": "Change Time",
-  "confirmDelete": "Are you sure you want to delete?"
+  "confirmDelete": "Are you sure you want to delete?",
+  "streakDays": "{count} Day Streak",
+  "@streakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notDoneDays": "{count} Days Not Done",
+  "@notDoneDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -18,23 +18,37 @@ class ActionsManageScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        title: Text(
-          l10n.manageActionsTitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: false,
+        title: Text(l10n.manageActionsTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<Locale>(
                 value: locale,
-                icon: const Icon(Icons.language, color: Colors.black54),
+                icon: const Icon(
+                  Icons.language,
+                  color: Colors.white,
+                ), // Explicit white to ensure visibility
+                dropdownColor: Colors.white, // Ensure dropdown bg is white
+                style: const TextStyle(
+                  color: Colors.black87,
+                ), // Default text style for items
+                selectedItemBuilder: (BuildContext context) {
+                  return const [
+                    // Displayed in the App Bar (White text)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'English',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('日本語', style: TextStyle(color: Colors.white)),
+                    ),
+                  ];
+                },
                 items: const [
                   DropdownMenuItem(value: Locale('en'), child: Text('English')),
                   DropdownMenuItem(value: Locale('ja'), child: Text('日本語')),

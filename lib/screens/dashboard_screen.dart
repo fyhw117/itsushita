@@ -16,18 +16,7 @@ class DashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA), // Light grey background
-      appBar: AppBar(
-        title: Text(
-          l10n.dashboardTitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: false,
-      ),
+      appBar: AppBar(title: Text(l10n.dashboardTitle)),
       body: actions.isEmpty
           ? Center(
               child: Column(
