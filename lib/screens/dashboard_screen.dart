@@ -42,8 +42,8 @@ class DashboardScreen extends ConsumerWidget {
             )
           : GridView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 childAspectRatio: 1.5,
@@ -137,12 +137,12 @@ class _ActionCard extends ConsumerWidget {
 
       if (daysSinceLast > 1) {
         // Not done for a while
-        return '$daysSinceLast日未実施';
+        return l10n.notDoneDays(daysSinceLast);
       } else {
         // Done recently, show streak
         final streak = getStreak();
-        if (streak > 1) {
-          return '$streak日連続';
+        if (streak > 0) {
+          return l10n.streakDays(streak);
         }
       }
       return '';
