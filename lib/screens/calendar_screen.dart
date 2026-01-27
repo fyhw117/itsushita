@@ -65,6 +65,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               lastDay: DateTime.utc(2030, 12, 31),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              rowHeight:
+                  85, // Increase row height to accommodate larger markers
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = selectedDay;
@@ -82,6 +84,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   shape: BoxShape.circle,
                 ),
                 markerSize: 8,
+                cellMargin: EdgeInsets.all(2),
               ),
               headerStyle: const HeaderStyle(
                 formatButtonVisible: false,
@@ -96,29 +99,51 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   if (events.isEmpty) return null;
                   final eventRecords = events.cast<ActionRecord>();
 
-                  // Take up to 4 unique action colors to show
+                  // Show all unique actions (layout handles wrap)
                   final uniqueActionIds = eventRecords
                       .map((e) => e.actionId)
-                      .toSet()
-                      .take(4);
+                      .toSet();
 
                   return Positioned(
-                    bottom: 1,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: uniqueActionIds.map((id) {
-                        final colorValue =
-                            actionMap[id]?.colorValue ?? Colors.grey.toARGB32();
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 1),
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: Color(colorValue),
-                            shape: BoxShape.circle,
-                          ),
-                        );
-                      }).toList(),
+                    bottom: 4,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 2,
+                        runSpacing: 2,
+                        children: uniqueActionIds.map((id) {
+                          final action = actionMap[id];
+                          final colorValue =
+                              action?.colorValue ?? Colors.grey.toARGB32();
+                          // Display up to 2 characters
+                          final String label =
+                              (action != null && action.name.isNotEmpty)
+                              ? action.name.trim().characters.take(2).toString()
+                              : '?';
+
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Color(colorValue),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                height: 1.0,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   );
                 },
