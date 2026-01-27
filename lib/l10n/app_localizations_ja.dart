@@ -110,6 +110,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get changeTime => '時間を変更';
 
   @override
+  String get showConsecutiveDays => '連続日数を表示';
+
+  @override
   String get confirmDelete => '本当に削除しますか？';
 
   @override

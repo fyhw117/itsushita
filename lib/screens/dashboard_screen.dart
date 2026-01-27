@@ -148,7 +148,7 @@ class _ActionCard extends ConsumerWidget {
       return '';
     }
 
-    final streakText = getStreakText();
+    final streakText = action.showConsecutiveDays ? getStreakText() : '';
 
     return Container(
       decoration: BoxDecoration(

@@ -160,6 +160,7 @@ class ActionsManageScreen extends ConsumerWidget {
     Color selectedColor = actionToEdit != null
         ? Color(actionToEdit.colorValue)
         : Colors.blue;
+    bool showConsecutiveDays = actionToEdit?.showConsecutiveDays ?? true;
 
     showDialog(
       context: context,
@@ -204,6 +205,15 @@ class ActionsManageScreen extends ConsumerWidget {
                           },
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 16),
+                    SwitchListTile(
+                      title: Text(l10n.showConsecutiveDays),
+                      value: showConsecutiveDays,
+                      onChanged: (val) {
+                        setState(() => showConsecutiveDays = val);
+                      },
+                      contentPadding: EdgeInsets.zero,
                     ),
                     const SizedBox(height: 16),
                     Wrap(
@@ -279,6 +289,7 @@ class ActionsManageScreen extends ConsumerWidget {
                         type: selectedType,
                         colorValue: selectedColor.toARGB32(),
                         frequency: frequencyController.text,
+                        showConsecutiveDays: showConsecutiveDays,
                       );
                       ref
                           .read(actionListProvider.notifier)

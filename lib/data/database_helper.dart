@@ -23,7 +23,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -36,7 +36,8 @@ class DatabaseHelper {
         name TEXT,
         type INTEGER,
         colorValue INTEGER,
-        frequency TEXT
+        frequency TEXT,
+        showConsecutiveDays INTEGER DEFAULT 1
       )
     ''');
     await db.execute('''
@@ -53,6 +54,11 @@ class DatabaseHelper {
     if (oldVersion < 2) {
       await db.execute(
         'ALTER TABLE actions ADD COLUMN frequency TEXT DEFAULT ""',
+      );
+    }
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE actions ADD COLUMN showConsecutiveDays INTEGER DEFAULT 1',
       );
     }
   }

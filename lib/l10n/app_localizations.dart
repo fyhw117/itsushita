@@ -296,6 +296,12 @@ abstract class AppLocalizations {
   /// **'Change Time'**
   String get changeTime;
 
+  /// No description provided for @showConsecutiveDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Consecutive Days'**
+  String get showConsecutiveDays;
+
   /// No description provided for @confirmDelete.
   ///
   /// In en, this message translates to:

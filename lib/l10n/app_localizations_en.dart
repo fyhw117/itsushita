@@ -111,6 +111,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changeTime => 'Change Time';
 
   @override
+  String get showConsecutiveDays => 'Show Consecutive Days';
+
+  @override
   String get confirmDelete => 'Are you sure you want to delete?';
 
   @override

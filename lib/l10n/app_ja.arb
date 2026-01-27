@@ -32,6 +32,7 @@
   "editRecord": "記録の編集",
   "changeDate": "日付を変更",
   "changeTime": "時間を変更",
+  "showConsecutiveDays": "連続日数を表示",
   "confirmDelete": "本当に削除しますか？",
   "streakDays": "{count}日連続",
   "notDoneDays": "{count}日間未実施"

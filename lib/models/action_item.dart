@@ -9,6 +9,7 @@ class ActionItem {
   final ActionType type;
   final int colorValue; // Store color as int
   final String frequency; // Description of frequency
+  final bool showConsecutiveDays;
 
   ActionItem({
     required this.id,
@@ -16,6 +17,7 @@ class ActionItem {
     required this.type,
     required this.colorValue,
     required this.frequency,
+    this.showConsecutiveDays = true,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,6 +27,7 @@ class ActionItem {
       'type': type.index,
       'colorValue': colorValue,
       'frequency': frequency,
+      'showConsecutiveDays': showConsecutiveDays ? 1 : 0,
     };
   }
 
@@ -35,6 +38,7 @@ class ActionItem {
       type: ActionType.values[map['type']],
       colorValue: map['colorValue'],
       frequency: map['frequency'] ?? '',
+      showConsecutiveDays: (map['showConsecutiveDays'] ?? 1) == 1,
     );
   }
 }

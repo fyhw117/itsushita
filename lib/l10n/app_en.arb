@@ -32,6 +32,7 @@
   "editRecord": "Edit Record",
   "changeDate": "Change Date",
   "changeTime": "Change Time",
+  "showConsecutiveDays": "Show Consecutive Days",
   "confirmDelete": "Are you sure you want to delete?",
   "streakDays": "{count} Day Streak",
   "@streakDays": {
