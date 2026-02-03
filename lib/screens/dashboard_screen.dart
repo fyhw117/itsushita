@@ -170,7 +170,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           maxCrossAxisExtent: 200,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
-                          childAspectRatio: 1.5,
+                          childAspectRatio: 1.4,
                         ),
                     itemCount: actions.length,
                     itemBuilder: (context, index) {
@@ -357,7 +357,7 @@ class _ActionCard extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
-              vertical: 12.0,
+              vertical: 8.0,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

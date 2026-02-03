@@ -65,8 +65,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               lastDay: DateTime.utc(2030, 12, 31),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              rowHeight:
-                  85, // Increase row height to accommodate larger markers
+              rowHeight: 75, // Decrease row height slightly
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = selectedDay;
@@ -95,14 +94,75 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 ),
               ),
               calendarBuilders: CalendarBuilders(
+                defaultBuilder: (context, day, focusedDay) {
+                  return Container(
+                    alignment: Alignment.topCenter,
+                    margin: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      '${day.day}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  );
+                },
+                todayBuilder: (context, day, focusedDay) {
+                  return Container(
+                    alignment: Alignment.topCenter,
+                    margin: const EdgeInsets.only(top: 8),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        color: Colors.tealAccent,
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${day.day}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                selectedBuilder: (context, day, focusedDay) {
+                  return Container(
+                    alignment: Alignment.topCenter,
+                    margin: const EdgeInsets.only(top: 8),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        color: Colors.teal,
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${day.day}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                },
                 markerBuilder: (context, day, events) {
                   if (events.isEmpty) return null;
                   final eventRecords = events.cast<ActionRecord>();
 
-                  // Show all unique actions (layout handles wrap)
                   final uniqueActionIds = eventRecords
                       .map((e) => e.actionId)
-                      .toSet();
+                      .toSet()
+                      .toList();
+
+                  const int maxMarkers = 6;
+                  final bool overflow = uniqueActionIds.length > maxMarkers;
+                  final displayIds = overflow
+                      ? uniqueActionIds.take(maxMarkers - 1)
+                      : uniqueActionIds;
 
                   return Positioned(
                     bottom: 4,
@@ -113,36 +173,58 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                         alignment: WrapAlignment.center,
                         spacing: 2,
                         runSpacing: 2,
-                        children: uniqueActionIds.map((id) {
-                          final action = actionMap[id];
-                          final colorValue =
-                              action?.colorValue ?? Colors.grey.toARGB32();
-                          // Display up to 2 characters
-                          final String label =
-                              (action != null && action.name.isNotEmpty)
-                              ? action.name.trim().characters.take(2).toString()
-                              : '?';
+                        children: [
+                          ...displayIds.map((id) {
+                            final action = actionMap[id];
+                            final colorValue =
+                                action?.colorValue ?? Colors.grey.toARGB32();
+                            // Display 1 character
+                            final String label =
+                                (action != null && action.name.isNotEmpty)
+                                ? action.name
+                                      .trim()
+                                      .characters
+                                      .take(1)
+                                      .toString()
+                                : '?';
 
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Color(colorValue),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              label,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 9,
-                                fontWeight: FontWeight.bold,
-                                height: 1.0,
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color(colorValue),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                label,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.0,
+                                ),
+                              ),
+                            );
+                          }),
+                          if (overflow)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              child: const Text(
+                                '...',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.0,
+                                ),
                               ),
                             ),
-                          );
-                        }).toList(),
+                        ],
                       ),
                     ),
                   );
